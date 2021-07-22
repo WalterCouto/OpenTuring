@@ -31,3 +31,11 @@ turing/vc projects/BasicTest.t
 
 turing/obj/*
 turing/Debug/*
+turing/Release/*
+turing/.vs/*
+turing/TProlog/Debug/*
+turing/TProlog/Release/*
+turing/vc projects/Prolog/Debug/*
+turing/vc projects/Prolog/Release/*
+turing/vc projects/Debug/*
+turing/vc projects/Release/*

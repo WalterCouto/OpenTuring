@@ -129,6 +129,9 @@ static void	MyGetSinCos (int pmAngle, double *pmSine, double *pmCosine);
 /************************************************************************/
 void	MDIOPic_Init (void)
 {
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+	stHasTransparentBlt = TRUE;
+#else
     // Set to true if Win98 or better or Win2K or better
     OSVERSIONINFO	myOSVersionInfo;
 
@@ -150,6 +153,7 @@ void	MDIOPic_Init (void)
     {
     	stHasTransparentBlt = FALSE;
     }
+#endif
 } // MDIOPic_Init
 
 

@@ -62,7 +62,7 @@ void ReadOOTFile (char *pmFileName, char **pmTextHandle, long *pmTextSize,
 	return;
     }
 
-    if ((fd=open (pmFileName, O_RDONLY|O_BINARY)) < 0 )
+    if ((fd=_open (pmFileName, O_RDONLY|O_BINARY)) < 0 )
     {
 	*pmResult = ResultCode_NoRead;
 	return;
@@ -70,21 +70,21 @@ void ReadOOTFile (char *pmFileName, char **pmTextHandle, long *pmTextSize,
 
     if ((*pmTextHandle = malloc (statBuf.st_size+1)) == NULL )
     {
-	(void) close(fd);
+	(void) _close(fd);
 	*pmResult = ResultCode_NoSpace;
 	return;
     }
 
-    if (read (fd, *pmTextHandle, statBuf.st_size ) != statBuf.st_size )
+    if (_read (fd, *pmTextHandle, statBuf.st_size ) != statBuf.st_size )
     {
-	(void) close(fd);
+	(void) _close(fd);
 	free (*pmTextHandle);
 	*pmTextHandle = NULL;
 	*pmResult = ResultCode_NoRead;
 	return;
     }
     
-    (void) close(fd);
+    (void) _close(fd);
 
     /* Find first carriage return or line feed */
 
@@ -210,7 +210,7 @@ void
 RemoveFile(fileName)
     char *fileName;
 {
-    (void) unlink(fileName);
+    (void) _unlink(fileName);
 }
 
 

@@ -19,12 +19,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -37,7 +39,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -48,8 +49,9 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;user32.lib;libcmtd.lib;version.lib;winmm.lib;comctl32.lib;odbc32.lib;odbccp32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>MSVCRTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>Gdi32.lib;Comdlg32.lib;Advapi32.lib;Shell32.lib;opengl32.lib;glu32.lib;user32.lib;libcmtd.lib;version.lib;winmm.lib;comctl32.lib;odbc32.lib;odbccp32.lib;wininet.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -58,6 +60,9 @@
     <PostBuildEvent>
       <Command>copy ..\..\Debug\Prolog.exe ..\..\test\support\bin\TuringEXEProlog.exe</Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -70,7 +75,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Gdi32.lib;Comdlg32.lib;Advapi32.lib;Shell32.lib;opengl32.lib;glu32.lib;user32.lib;libcmtd.lib;version.lib;winmm.lib;comctl32.lib;odbc32.lib;odbccp32.lib;wininet.lib</AdditionalDependencies>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\TProlog\TProlog.vcxproj">
@@ -172,11 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\tprolog.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\Debug\HTMLHELP.LIB">
-      <FileType>Document</FileType>
-    </Library>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

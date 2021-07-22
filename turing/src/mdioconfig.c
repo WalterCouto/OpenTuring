@@ -7,6 +7,10 @@
 /*******************/
 #include <windows.h>
 
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+#include "versionhelpers.h"
+#endif
+
 /****************/
 /* Self include */
 /****************/
@@ -62,6 +66,9 @@
 /************************************************************************/
 int	MDIOConfig_GetOS (void)
 {
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+	return 0;
+#else
     OSVERSIONINFO	myOSVersionInfo;
 
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
@@ -100,6 +107,7 @@ int	MDIOConfig_GetOS (void)
     }
 
     return 0;
+#endif
 } // MDIOConfig_GetOS
 
 
@@ -109,8 +117,27 @@ int	MDIOConfig_GetOS (void)
 int	MDIOConfig_GetProcessor (void)
 {
     SYSTEM_INFO		mySystemInfo;
-    OSVERSIONINFO	myOSVersionInfo;
 
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+	GetSystemInfo(&mySystemInfo);
+	if (mySystemInfo.wProcessorLevel == 3)
+	{
+		return 386;
+	}
+	else if (mySystemInfo.wProcessorLevel == 4)
+	{
+		return 486;
+	}
+	else if (mySystemInfo.wProcessorLevel == 5)
+	{
+		return 586;
+	}
+	else if (mySystemInfo.wProcessorLevel == 6)
+	{
+		return 686;
+	}
+#else
+    OSVERSIONINFO	myOSVersionInfo;
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
     myOSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&myOSVersionInfo);
@@ -152,6 +179,7 @@ int	MDIOConfig_GetProcessor (void)
 	    return 686;
 	}
     }
+#endif
 
     return 0;
 } // MDIOConfig_GetProcessor
@@ -165,6 +193,7 @@ BOOL	MDIOConfig_IsCoProcessorPresent (void)
     HKEY	myKey;
     SYSTEM_INFO mySystemInfo;
 
+#if _MSC_VER < 1800
     // return FALSE if we are not running under Windows NT
     // this should be expanded to cover alternative Win32 platforms
     if (!(GetVersion() & 0x7FFFFFFF))
@@ -172,6 +201,7 @@ BOOL	MDIOConfig_IsCoProcessorPresent (void)
         SetLastError (MY_ERROR_WRONG_OS);
         return (FALSE);
     }
+#endif
 
     // we return TRUE if we're not running on x86
     // other CPUs have built in floating-point, with no registry entry

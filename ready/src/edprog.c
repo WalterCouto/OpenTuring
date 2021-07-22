@@ -5,6 +5,11 @@
 /*******************/
 /* System includes */
 /*******************/
+#include <windows.h>
+
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+#include "versionhelpers.h"
+#endif
 
 /****************/
 /* Self include */
@@ -85,7 +90,6 @@ extern BOOL	EdProg_Init (void)
     DWORD		myVersionSize;
     char		*myVersionData, *myVersionInfo;
     UINT		myVersionInfoSize;
-    OSVERSIONINFO	myOSVersionInfo;
     
     EdFile_ConstructPath (myLangDLLPath, IDS_READY_BIN, IDS_LANG_DLL);
     
@@ -207,6 +211,11 @@ extern BOOL	EdProg_Init (void)
     FreeLibrary (myLangLibrary);
 
     // Set the OS version
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+    gProgram.operatingSystem = IsWindowsVistaOrGreater() ? WIN_NEWER : WIN_XP;
+    gProgram.servicePack[0] = 0;
+#else
+    OSVERSIONINFO	myOSVersionInfo;
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
     myOSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&myOSVersionInfo);
@@ -270,6 +279,7 @@ extern BOOL	EdProg_Init (void)
 	strncpy (gProgram.servicePack, myOSVersionInfo.szCSDVersion, 130);
 	gProgram.servicePack [130] = 0;
     }
+#endif
     
     gProgram.globalsInitialized = TRUE;
     

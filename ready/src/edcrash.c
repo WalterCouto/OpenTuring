@@ -206,6 +206,10 @@ static BOOL __stdcall 	MyReadProcessMemory (HANDLE pmHandle,
 /************************************************************************/
 BOOL	EdCrash_Init (void)
 {
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+    stIsNT = TRUE;
+    stIsNT4 = FALSE;
+#else
     OSVERSIONINFO	myOSVersionInfo;
 
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
@@ -228,6 +232,7 @@ BOOL	EdCrash_Init (void)
     	    stIsNT4 = FALSE;
     	}
     }
+#endif
 
     stCrashInited = TRUE;
     

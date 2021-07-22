@@ -87,6 +87,25 @@ extern void TL_TLI_TLISS ();extern void TL_TLI_TLIPS ();
 /************************************************************************/
 void	MDIO_Init (void)
 {
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+    // To avoid trying to call a non-existent function, we make all the calls
+    // by loading up the function's address
+    HINSTANCE myDLL = LoadLibrary("psapi.dll");
+    if (myDLL != NULL)
+    {
+        stGetProcessMemoryInfoProc =
+            (GetProcessMemoryInfoProc)GetProcAddress(myDLL,
+                "GetProcessMemoryInfo");
+    }
+
+    myDLL = LoadLibrary("user32.dll");
+    if (myDLL != NULL)
+    {
+        stGetGuiResourcesProc =
+            (GetGuiResourcesProc)GetProcAddress(myDLL,
+                "GetGuiResources");
+    }
+#else
     OSVERSIONINFO	myOSVersionInfo;
     HMODULE		myDLL;
     
@@ -119,7 +138,8 @@ void	MDIO_Init (void)
     		(GetGuiResourcesProc) GetProcAddress (myDLL, 
     						      "GetGuiResources");
     	}    							
-    }    					
+    }
+#endif
 } // MDIO_Init
 
 

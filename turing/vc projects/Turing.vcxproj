@@ -18,11 +18,13 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -44,7 +46,6 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\..\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\..\Debug\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -76,7 +77,6 @@
       <Culture>0x1009</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/Turing.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/Turing.pdb</ProgramDatabaseFile>
@@ -85,6 +85,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>User32.lib;Gdi32.lib;Comdlg32.lib;Shell32.lib;Htmlhelp.lib;Advapi32.lib;libcmtd.lib;opengl32.lib;glu32.lib;version.lib;winmm.lib;comctl32.lib;odbc32.lib;odbccp32.lib;wininet.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -93,6 +94,9 @@
     <PostBuildEvent>
       <Command>echo PROBLEM! - You have created the release version of Turing - You want the debug version</Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -128,7 +132,6 @@
       <Command>del ..\test\turing.exe</Command>
     </PreLinkEvent>
     <Link>
-      <AdditionalDependencies>libcmtd.lib;opengl32.lib;glu32.lib;version.lib;winmm.lib;comctl32.lib;odbc32.lib;odbccp32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\..\Debug/Turing.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -138,7 +141,9 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>..\src\SDL-1.2.14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>User32.lib;Gdi32.lib;Comdlg32.lib;Shell32.lib;Htmlhelp.lib;Advapi32.lib;libcmtd.lib;opengl32.lib;glu32.lib;version.lib;winmm.lib;comctl32.lib;odbc32.lib;odbccp32.lib;wininet.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -151,6 +156,9 @@ copy ..\Debug\turing.pdb ..\test\support\bin\turing.pdb
 echo Copied turing.pdb
 </Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\ready\src\rsrc\breakpoint.cur" />
@@ -243,11 +251,6 @@ echo Copied turing.pdb
       <Project>{71333baa-9c14-4d40-b15a-db1ff462b765}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\Debug\HTMLHELP.LIB">
-      <FileType>Document</FileType>
-    </Library>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

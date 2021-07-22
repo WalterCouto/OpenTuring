@@ -153,7 +153,6 @@ static LRESULT CALLBACK	MyMessageBoxCenteringProc (int pmHookCode,
 /************************************************************************/
 BOOL	EdGUI_Init (void)
 {
-    OSVERSIONINFO	myOSVersionInfo;
     static BOOL		myStEdGUIInitialized = FALSE;
     
     if (myStEdGUIInitialized)
@@ -161,6 +160,10 @@ BOOL	EdGUI_Init (void)
     	return TRUE;
     }
     
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+    stMouseWheelMessage = 0;
+#else
+    OSVERSIONINFO	myOSVersionInfo;
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
     myOSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&myOSVersionInfo);
@@ -175,6 +178,7 @@ BOOL	EdGUI_Init (void)
     {
     	stMouseWheelMessage = RegisterWindowMessage (MSH_MOUSEWHEEL);
     }
+#endif
     
     stOPENFILENAMESize = sizeof (OPENFILENAME);
     
@@ -591,9 +595,12 @@ int	EdGUI_GetMouseWheelMessage (void)
 /************************************************************************/
 int	EdGUI_GetMouseWheelSettings (void)
 {
-    OSVERSIONINFO	myOSVersionInfo;
     int			myScrollLines;
     
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+    SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &myScrollLines, 0);
+#else
+    OSVERSIONINFO	myOSVersionInfo;
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
     myOSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&myOSVersionInfo);
@@ -625,6 +632,7 @@ int	EdGUI_GetMouseWheelSettings (void)
     {
 	SystemParametersInfo (SPI_GETWHEELSCROLLLINES, 0, &myScrollLines, 0);
     }
+#endif
     
     if (myScrollLines != 0)
     {

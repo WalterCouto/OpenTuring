@@ -433,8 +433,18 @@ static long	MyGetPortAddressFromRegistry (int pmPort)
 /************************************************************************/
 static void	MyDeterminePortAddress (int pmPort)
 {
-    OSVERSIONINFO	myOSVersionInfo;
     long		myAddr;
+#if (_MSC_VER >= 1800) && (!defined _USING_V110_SDK71_)
+    if (MIO_parallelIOPort != 0)
+    {
+        myAddr = MIO_parallelIOPort;
+    }
+    else
+    {
+        myAddr = MyGetPortAddressFromRegistry(pmPort);
+    }
+#else
+    OSVERSIONINFO	myOSVersionInfo;
     
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
     myOSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -455,7 +465,8 @@ static void	MyDeterminePortAddress (int pmPort)
     	    myAddr = MyGetPortAddressFromRegistry (pmPort);
     	}
     }
-    
+#endif
+
     if (myAddr != -1)
     {
     	stWritePortAddress [pmPort] = myAddr;
@@ -478,16 +489,18 @@ static void	MyDeterminePortAddress (int pmPort)
 /************************************************************************/
 static void	MyInitializeDLPortIO (void)
 {
-    OSVERSIONINFO	myOSVersionInfo;
     char		myDLPortIODLLPath [4096];
     char		*myPtr;
     HINSTANCE		myLibrary;
     HKEY		myRegKey;
     long		myResult;
     
+#if _MSC_VER < 1800
+    OSVERSIONINFO	myOSVersionInfo;
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
     myOSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&myOSVersionInfo);
+#endif
 
     // Initialize these to zero.  Figure out the value when called.
     stWritePortAddress [0] = 0;
@@ -499,11 +512,13 @@ static void	MyInitializeDLPortIO (void)
     stReadPortAddress [2] = 0;
     stReadPortAddress [3] = 0;
 
+#if _MSC_VER < 1800
     if (myOSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) 
     {
         stIsDLPortIOInitialized = TRUE;
 	return;
     }
+#endif
 
     stUseDriver = TRUE;
 

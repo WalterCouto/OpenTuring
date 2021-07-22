@@ -150,6 +150,7 @@ int	MDIOFile_DiskFree (const char *pmPathName)
 	strncpy (myRootDir, pmPathName, myPtr - pmPathName);
 	myRootDir [myPtr - pmPathName] = 0;
 
+#if _MSC_VER < 1800
 	// Windows 95 cannot look up disk free on a network share.
 	if ((myRootDir [0] == '\\') && (myRootDir [1] == '\\'))
 	{
@@ -167,6 +168,7 @@ int	MDIOFile_DiskFree (const char *pmPathName)
 	        return -1;
 	    }
 	}
+#endif
 
     	myPrevErrorMode = SetErrorMode (SEM_FAILCRITICALERRORS);
 	myResult = GetDiskFreeSpace (myRootDir, &mySectPerClust, 
@@ -347,7 +349,6 @@ void	MDIOFile_Status (const char *pmPathName, int *pmFileSize,
 {
     UINT		myPrevErrorMode;
     DWORD		myWindowsAttributes;
-    OSVERSIONINFO	myOSVersionInfo;
     int			myOOTAttributes;
     HANDLE		myHandle;
     FILETIME		myCreationTime, myLastAccessTime, myLastWriteTime;
@@ -415,7 +416,9 @@ void	MDIOFile_Status (const char *pmPathName, int *pmFileSize,
         myOOTAttributes |= OOT_ATTR_ARCHIVE;
     }
     
+#if _MSC_VER < 1800
     // Set the OS version
+    OSVERSIONINFO	myOSVersionInfo;
     ZeroMemory (&myOSVersionInfo, sizeof (myOSVersionInfo));
     myOSVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&myOSVersionInfo);
@@ -451,6 +454,7 @@ void	MDIOFile_Status (const char *pmPathName, int *pmFileSize,
 	*pmFileSize = 0;
 	return;
     }
+#endif
 
     myPtr = strrchr (pmPathName, '.');
     if ((myPtr != NULL) &&

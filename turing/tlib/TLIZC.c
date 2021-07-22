@@ -51,6 +51,6 @@ void
 TLIreset( fd )
     FILE *fd;
 {
-    clearerr( fd );
-    fd->_cnt = 0;
+    clearerr(fd);
+    rewind(fd);
 }
